@@ -1,13 +1,14 @@
+extern crate nalgebra as na;
 extern crate image;
 
+mod basics;
 mod scene;
 mod renderer;
 mod post;
+mod intersectable;
 
 use renderer::{Renderer};
 use post::{PostProcessor};
-
-pub type HdrImage = image::ImageBuffer<image::Rgb<f32>, Vec<f32>>;
 
 fn main()
 {
