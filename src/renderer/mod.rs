@@ -2,26 +2,29 @@ extern crate std;
 extern crate image;
 
 use basics::HdrImage;
+use intersectable::Intersectable;
 use scene::Scene;
 
+use na;
 use na::Vec3;
 use image::Rgb;
 
-pub struct Renderer
+pub struct Renderer<'a>
 {
 	pub width: u32,
 	pub height: u32,
-	pub supersamples: u32
+	pub supersamples: u32,
+	scene: &'a Scene,
 }
 
-impl Renderer
+impl<'a> Renderer<'a>
 {
-	pub fn new() -> Renderer
+	pub fn new(scene : &Scene) -> Renderer
 	{
-		Renderer { width: 800, height: 600, supersamples: 10 }
+		Renderer { scene: scene, width: 800, height: 600, supersamples: 10 }
 	}
 
-	pub fn render(&self, scene : &Scene) -> HdrImage
+	pub fn render(&self) -> HdrImage
 	{
 		let mut result = HdrImage::new(self.width, self.height);
 
@@ -51,11 +54,14 @@ impl Renderer
 		let unit_circle = centre_x.min(centre_y);
 
 		return ((pixel_x - centre_x) / unit_circle,
-		        (pixel_y - centre_y) / unit_circle);
+		        (centre_y - pixel_y) / unit_circle);
 	}
 
 	fn render_sample(&self, x: f32, y: f32) -> Vec3<f32>
 	{
-		Vec3::new(0.0, 0.2, 0.8)
+		let ray = self.scene.camera.compute_ray(x, y);
+		let intersection = self.scene.objects.find_intersection(ray);
+
+		return intersection.map_or(na::zero(), |i| i.colour);
 	}
 }
