@@ -1,6 +1,7 @@
 use std;
 
 pub mod plane;
+pub mod sphere;
 pub mod union;
 
 use basics::{Ray};
