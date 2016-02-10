@@ -1,5 +1,6 @@
 use std;
 
+pub mod transformed;
 pub mod plane;
 pub mod sphere;
 pub mod union;
