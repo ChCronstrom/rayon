@@ -1,10 +1,7 @@
 use basics::*;
 use super::{LightInteraction, TexturePoint};
 
-use na;
 use na::{Diag, Norm};
-use rand;
-use rand::Rand;
 
 #[derive(Debug)]
 pub struct Lambertian
@@ -26,6 +23,7 @@ impl TexturePoint for Lambertian
 {
     fn evaluate_texture(&self, rng: &mut RandomSource, incidence: Vector, normal: Vector) -> LightInteraction
     {
+        let _ = incidence;
         let reflection_direction = rand_vector_in_half_sphere(rng, normal).normalize();
         let colour_filter = Matrix::from_diag(&self.pigment);
         LightInteraction {

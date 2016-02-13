@@ -5,7 +5,7 @@ use intersectable::{Intersection, Intersectable};
 use texture::Lambertian;
 
 use na;
-use na::{Norm, Vec3};
+use na::{Norm};
 
 #[derive(Debug)]
 pub struct Sphere;

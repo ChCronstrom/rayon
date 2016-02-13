@@ -8,8 +8,6 @@ pub mod union;
 use basics::*;
 use texture::TexturePoint;
 
-use na::{Pnt3, Vec3};
-
 #[derive(Debug)]
 pub struct Intersection
 {

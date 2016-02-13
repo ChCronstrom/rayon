@@ -4,8 +4,6 @@ use basics::*;
 use intersectable::Intersectable;
 use scene::Scene;
 
-use na;
-use na::Vec3;
 use image::Rgb;
 
 pub struct Renderer<'a>

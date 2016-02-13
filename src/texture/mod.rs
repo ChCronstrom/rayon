@@ -1,7 +1,6 @@
 mod lambertian;
 
 use std;
-use rand;
 
 use basics::*;
 

@@ -3,7 +3,7 @@ use std;
 use basics::*;
 
 use na;
-use na::{Mat3, Norm, Pnt3, Vec3};
+use na::{Norm};
 
 #[derive(Copy, Clone, Debug, Default)]
 pub struct Camera
@@ -15,7 +15,7 @@ impl Camera
 {
     pub fn from_position(position: Point, look_at: Point) -> Camera
     {
-        Camera::from_position_and_sky_vector(position, look_at, Vec3::new(0.0, 0.0, 1.0))
+        Camera::from_position_and_sky_vector(position, look_at, Vector::new(0.0, 0.0, 1.0))
     }
 
     pub fn from_position_and_sky_vector(position: Point, look_at: Point, sky_vector: Vector) -> Camera
@@ -32,9 +32,9 @@ impl Camera
         // `sky_vector`.
         let z_direction = na::cross(&x_direction, &y_direction).normalize();
 
-        let transformation = Mat3::new(x_direction.x, y_direction.x, z_direction.x,
-                                       x_direction.y, y_direction.y, z_direction.y,
-                                       x_direction.z, y_direction.z, z_direction.z);
+        let transformation = Matrix::new(x_direction.x, y_direction.x, z_direction.x,
+                                         x_direction.y, y_direction.y, z_direction.y,
+                                         x_direction.z, y_direction.z, z_direction.z);
 
         Camera
         {

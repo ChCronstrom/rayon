@@ -2,8 +2,6 @@ use basics::*;
 use intersectable::{Intersection, Intersectable};
 use texture;
 
-use na::Vec3;
-
 #[derive(Debug)]
 pub struct Plane;
 

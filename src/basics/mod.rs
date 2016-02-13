@@ -4,6 +4,7 @@ mod ray;
 pub use basics::trans::Trans;
 pub use basics::ray::Ray;
 
+use std;
 use image;
 use na;
 use na::{Mat3, Norm, Vec3, Pnt3};
@@ -17,6 +18,9 @@ pub type Matrix = Mat3<Float>;
 pub type Colour = Vec3<Float>;
 pub type HdrImage = image::ImageBuffer<image::Rgb<Float>, Vec<Float>>;
 pub type RandomSource = rand::Isaac64Rng;
+
+pub const EPSILON: Float = std::f32::EPSILON;
+pub const INFINITY: Float = std::f32::INFINITY;
 
 pub fn rand_vector_in_sphere<R: rand::Rng>(rng: &mut R) -> Vector
 {
@@ -73,7 +77,6 @@ mod tests
 {
 	use super::*;
 
-	use na;
 	use na::*;
 	use rand;
 
@@ -81,7 +84,7 @@ mod tests
 	fn test_rand_vector_in_sphere()
 	{
 		let mut randomizer = rand::thread_rng();
-		for i in 0..100
+		for _ in 0..100
 		{
 			let random_vector = rand_vector_in_sphere(&mut randomizer);
 			assert!(random_vector.norm() < 1.0);
@@ -94,7 +97,7 @@ mod tests
 		let mut randomizer = rand::thread_rng();
 
 		let direction = Vector::new(1.0, 0.0, 0.0);
-		for i in 0..100
+		for _ in 0..100
 		{
 			let random_vector = rand_vector_in_half_sphere(&mut randomizer, direction);
 			assert!(random_vector.norm() < 1.0);
@@ -102,7 +105,7 @@ mod tests
 		}
 
 		let direction = Vector::new(-1.0, 0.0, 0.0);
-		for i in 0..100
+		for _ in 0..100
 		{
 			let random_vector = rand_vector_in_half_sphere(&mut randomizer, direction);
 			assert!(random_vector.norm() < 1.0);
@@ -110,7 +113,7 @@ mod tests
 		}
 
 		let direction = Vector::new(0.0, 1.0, 0.0);
-		for i in 0..100
+		for _ in 0..100
 		{
 			let random_vector = rand_vector_in_half_sphere(&mut randomizer, direction);
 			assert!(random_vector.norm() < 1.0);
@@ -118,7 +121,7 @@ mod tests
 		}
 
 		let direction = Vector::new(0.0, -1.0, 0.0);
-		for i in 0..100
+		for _ in 0..100
 		{
 			let random_vector = rand_vector_in_half_sphere(&mut randomizer, direction);
 			assert!(random_vector.norm() < 1.0);
@@ -126,7 +129,7 @@ mod tests
 		}
 
 		let direction = Vector::new(0.0, 0.0, 1.0);
-		for i in 0..100
+		for _ in 0..100
 		{
 			let random_vector = rand_vector_in_half_sphere(&mut randomizer, direction);
 			assert!(random_vector.norm() < 1.0);
@@ -134,7 +137,7 @@ mod tests
 		}
 
 		let direction = Vector::new(0.0, 0.0, -1.0);
-		for i in 0..100
+		for _ in 0..100
 		{
 			let random_vector = rand_vector_in_half_sphere(&mut randomizer, direction);
 			assert!(random_vector.norm() < 1.0);

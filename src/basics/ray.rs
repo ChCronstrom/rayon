@@ -1,15 +1,11 @@
-use std;
-
 use basics::*;
-
-use na::{Pnt3, Vec3};
 
 #[derive(Copy, Clone, Debug)]
 pub struct Ray {
 	pub origin: Point,
 	pub direction: Vector,
-	pub start: f32,
-	pub stop: f32
+	pub start: Float,
+	pub stop: Float
 }
 
 impl Ray
@@ -19,12 +15,12 @@ impl Ray
 		Ray {
 			origin: origin,
 			direction: direction,
-			start: std::f32::EPSILON,
-			stop: std::f32::INFINITY,
+			start: EPSILON,
+			stop: INFINITY,
 		}
 	}
 
-	pub fn evaluate(self, t: f32) -> Point
+	pub fn evaluate(self, t: Float) -> Point
 	{
 		self.origin + self.direction * t
 	}

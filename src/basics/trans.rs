@@ -3,7 +3,6 @@ use std;
 use basics::*;
 
 use na;
-use na::{Mat3, Pnt3, Vec3};
 
 #[derive(Copy, Clone, Debug)]
 pub struct Trans
@@ -14,10 +13,10 @@ pub struct Trans
 
 impl Trans
 {
-	pub fn new_translation(x: f32, y: f32, z: f32) -> Trans
+	pub fn new_translation(x: Float, y: Float, z: Float) -> Trans
 	{
 		let mut result = Trans::default();
-		result.translation = Vec3::new(x, y, z);
+		result.translation = Vector::new(x, y, z);
 		return result;
 	}
 
