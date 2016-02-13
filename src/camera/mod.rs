@@ -1,6 +1,6 @@
 use std;
 
-use basics::{Ray, Trans};
+use basics::*;
 
 use na;
 use na::{Mat3, Norm, Pnt3, Vec3};
@@ -13,12 +13,12 @@ pub struct Camera
 
 impl Camera
 {
-    pub fn from_position(position: Pnt3<f32>, look_at: Pnt3<f32>) -> Camera
+    pub fn from_position(position: Point, look_at: Point) -> Camera
     {
         Camera::from_position_and_sky_vector(position, look_at, Vec3::new(0.0, 0.0, 1.0))
     }
 
-    pub fn from_position_and_sky_vector(position: Pnt3<f32>, look_at: Pnt3<f32>, sky_vector: Vec3<f32>) -> Camera
+    pub fn from_position_and_sky_vector(position: Point, look_at: Point, sky_vector: Vector) -> Camera
     {
         // The y-direction (forwards) of the camera is the vector from `position` to `look_at`,
         // normalized.

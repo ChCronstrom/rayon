@@ -4,5 +4,6 @@ version = "0.1.0"
 authors = ["christoffer"]
 
 [dependencies]
-nalgebra = "0.5.1"
 image = "0.6.1"
+nalgebra = "0.5.1"
+rand = "0.3.13"

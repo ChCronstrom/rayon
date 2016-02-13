@@ -1,6 +1,6 @@
 use std;
 
-use basics::{invert, Ray};
+use basics::*;
 
 use na;
 use na::{Mat3, Pnt3, Vec3};
@@ -8,8 +8,8 @@ use na::{Mat3, Pnt3, Vec3};
 #[derive(Copy, Clone, Debug)]
 pub struct Trans
 {
-	pub transformation: Mat3<f32>,
-	pub translation: Vec3<f32>
+	pub transformation: Matrix,
+	pub translation: Vector
 }
 
 impl Trans
@@ -34,21 +34,21 @@ impl Trans
     }
 }
 
-impl std::ops::Mul<Vec3<f32>> for Trans
+impl std::ops::Mul<Vector> for Trans
 {
-	type Output = Vec3<f32>;
+	type Output = Vector;
 
-	fn mul(self, rhs: Vec3<f32>) -> Vec3<f32>
+	fn mul(self, rhs: Vector) -> Vector
 	{
 		self.transformation * rhs
 	}
 }
 
-impl std::ops::Mul<Pnt3<f32>> for Trans
+impl std::ops::Mul<Point> for Trans
 {
-	type Output = Pnt3<f32>;
+	type Output = Point;
 
-	fn mul(self, rhs: Pnt3<f32>) -> Pnt3<f32>
+	fn mul(self, rhs: Point) -> Point
 	{
 		self.transformation * rhs + self.translation
 	}
@@ -58,7 +58,7 @@ impl std::ops::Mul<Ray> for Trans
 {
 	type Output = Ray;
 
-	fn mul(self, rhs : Ray) -> Ray
+	fn mul(self, rhs: Ray) -> Ray
 	{
 		Ray
 		{

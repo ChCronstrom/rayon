@@ -1,17 +1,18 @@
 use std;
 
-use basics::{Ray};
+use basics::*;
 use intersectable::{Intersection, Intersectable};
+use texture::Lambertian;
 
 use na;
-use na::Vec3;
+use na::{Norm, Vec3};
 
 #[derive(Debug)]
 pub struct Sphere;
 
 impl Intersectable for Sphere
 {
-    fn find_intersection(&self, ray : Ray) -> Option<Intersection>
+    fn find_intersection(&self, ray: Ray) -> Option<Intersection>
     {
         // The basic sphere has the equation x² + y² + z² = 1.
         // The ray has equation (xyz) = origin + t * direction, for t in (start, stop).
@@ -63,11 +64,13 @@ impl Intersectable for Sphere
             return None;
         }
 
+        let position = ray.evaluate(t);
         return Some(Intersection
         {
             t_value: t,
-            position: ray.evaluate(t),
-            colour: Vec3::new(0.8, 0.0, 0.2),
+            position: position,
+            normal: position.as_vec().normalize(),
+            texture: Box::new(Lambertian::new(Colour::new(0.8, 0.0, 0.2))),
         });
     }
 }

@@ -1,5 +1,6 @@
-use basics::{Ray};
+use basics::*;
 use intersectable::{Intersection, Intersectable};
+use texture;
 
 use na::Vec3;
 
@@ -24,7 +25,8 @@ impl Intersectable for Plane
             {
                 t_value: t_solution,
                 position: ray.evaluate(t_solution),
-                colour: Vec3::new(0.0, 0.2, 0.8)
+                normal: Vector::new(0.0, 0.0, 1.0),
+                texture: Box::new(texture::Lambertian::new(Colour::new(0.9, 0.9, 0.99))),
             })
         }
         else

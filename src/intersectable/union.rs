@@ -13,14 +13,14 @@ impl Union
     {
         Union
         {
-            subobjects : Vec::new(),
+            subobjects: Vec::new(),
         }
     }
 }
 
 impl Intersectable for Union
 {
-    fn find_intersection(&self, ray : Ray) -> Option<Intersection>
+    fn find_intersection(&self, ray: Ray) -> Option<Intersection>
     {
         let mut ray = ray;
         let mut result = None;
@@ -28,8 +28,8 @@ impl Intersectable for Union
         {
             if let Some(intersection) = object.find_intersection(ray)
             {
-                result = Some(intersection);
                 ray.stop = intersection.t_value;
+                result = Some(intersection);
             }
         }
         return result;

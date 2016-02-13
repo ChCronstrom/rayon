@@ -1,7 +1,6 @@
-extern crate std;
 extern crate image;
 
-use basics::HdrImage;
+use basics::*;
 use intersectable::Intersectable;
 use scene::Scene;
 
@@ -15,16 +14,23 @@ pub struct Renderer<'a>
 	pub height: u32,
 	pub supersamples: u32,
 	scene: &'a Scene,
+	rng: RandomSource,
 }
 
 impl<'a> Renderer<'a>
 {
-	pub fn new(scene : &Scene) -> Renderer
+	pub fn new(scene: &Scene) -> Renderer
 	{
-		Renderer { scene: scene, width: 800, height: 600, supersamples: 10 }
+		Renderer {
+			scene: scene,
+			width: 800,
+			height: 600,
+			supersamples: 10,
+			rng: RandomSource::new_unseeded(),
+		}
 	}
 
-	pub fn render(&self) -> HdrImage
+	pub fn render(&mut self) -> HdrImage
 	{
 		let mut result = HdrImage::new(self.width, self.height);
 
@@ -40,14 +46,14 @@ impl<'a> Renderer<'a>
 		result
 	}
 
-	fn render_pixel(&self, pixel_x: u32, pixel_y: u32) -> Rgb<f32>
+	fn render_pixel(&mut self, pixel_x: u32, pixel_y: u32) -> Rgb<f32>
 	{
 		let (x, y) = self.pixel_to_coord(pixel_x as f32, pixel_y as f32);
 		let colour = self.render_sample(x, y);
 		return Rgb { data: *colour.as_ref() };
 	}
 
-	fn pixel_to_coord(&self, pixel_x: f32, pixel_y: f32) -> (f32, f32)
+	fn pixel_to_coord(&mut self, pixel_x: f32, pixel_y: f32) -> (f32, f32)
 	{
 		let centre_x = self.width as f32 / 2.0;
 		let centre_y = self.height as f32 / 2.0;
@@ -57,11 +63,23 @@ impl<'a> Renderer<'a>
 		        (centre_y - pixel_y) / unit_circle);
 	}
 
-	fn render_sample(&self, x: f32, y: f32) -> Vec3<f32>
+	fn render_sample(&mut self, x: f32, y: f32) -> Colour
 	{
 		let ray = self.scene.camera.compute_ray(x, y);
-		let intersection = self.scene.objects.find_intersection(ray);
+		return self.render_ray(ray);
+	}
 
-		return intersection.map_or(na::zero(), |i| i.colour);
+	fn render_ray(&mut self, ray: Ray) -> Colour
+	{
+		if let Some(intersection) = self.scene.objects.find_intersection(ray)
+		{
+			let interaction = intersection.texture.evaluate_texture(&mut self.rng, ray.direction, intersection.normal);
+			let child_ray_colour = self.render_ray(Ray::new(intersection.position, interaction.child_ray));
+			return interaction.colour_matrix * child_ray_colour;
+		}
+		else
+		{
+			return Colour::new(1.0, 1.0, 1.0);
+		}
 	}
 }

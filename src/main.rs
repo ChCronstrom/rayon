@@ -1,5 +1,6 @@
-extern crate nalgebra as na;
 extern crate image;
+extern crate nalgebra as na;
+extern crate rand;
 
 mod basics;
 mod camera;
@@ -7,6 +8,7 @@ mod intersectable;
 mod post;
 mod renderer;
 mod scene;
+mod texture;
 
 use renderer::{Renderer};
 use post::{PostProcessor};
@@ -15,7 +17,7 @@ fn main()
 {
     println!("Making a scene ...");
     let scene = scene::example_scene();
-    let	renderer = Renderer::new(&scene);
+    let	mut renderer = Renderer::new(&scene);
     let postprocessor = PostProcessor::new();
 
     println!("Rendering ...");
