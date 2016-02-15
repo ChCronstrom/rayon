@@ -1,9 +1,12 @@
 use basics::*;
 use intersectable::{Intersection, Intersectable};
-use texture;
+use texture::*;
 
 #[derive(Debug)]
-pub struct Plane;
+pub struct Plane
+{
+    pub texture: Box<Texture>,
+}
 
 impl Intersectable for Plane
 {
@@ -17,14 +20,15 @@ impl Intersectable for Plane
         // this case one or both of the comparisons will always return false, which is what we
         // want. Parallel rays never intersect, even if it runs exactly along the plane.
         let t_solution = -ray.origin.z / ray.direction.z;
+        let position = ray.evaluate(t_solution);
         if (t_solution > ray.start) && (t_solution < ray.stop)
         {
             Some(Intersection
             {
                 t_value: t_solution,
-                position: ray.evaluate(t_solution),
+                position: position,
                 normal: Vector::new(0.0, 0.0, 1.0),
-                texture: Box::new(texture::Lambertian::new(Colour::new(0.9, 0.9, 0.99))),
+                texture: self.texture.evaluate_texture_point(position),
             })
         }
         else

@@ -1,31 +1,46 @@
 use basics::*;
-use super::{LightInteraction, TexturePoint};
+use super::*;
 
-use na::{Diag, Norm};
+use na::{Diag};
 
-#[derive(Debug)]
-pub struct Lambertian
+#[derive(Clone, Copy, Debug)]
+pub struct Lambertian<P: Pigment>
 {
-    pub pigment: Colour,
+    pub pigment: P,
 }
 
-impl Lambertian
+#[derive(Clone, Copy, Debug)]
+struct LambertianPoint<P: Pigment>
 {
-    pub fn new(colour: Colour) -> Lambertian
+    pub pigment: P,
+    pub location: Point,
+}
+
+impl<P: Pigment> Lambertian<P>
+{
+    pub fn new(pigment: P) -> Lambertian<P>
     {
         Lambertian {
-            pigment: colour,
+            pigment: pigment,
         }
     }
 }
 
-impl TexturePoint for Lambertian
+impl<P: Pigment + 'static> Texture for Lambertian<P>
+{
+    fn evaluate_texture_point(&self, location: Point) -> Box<TexturePoint>
+    {
+        Box::new(LambertianPoint { pigment: self.pigment, location: location })
+    }
+}
+
+impl<P: Pigment> TexturePoint for LambertianPoint<P>
 {
     fn evaluate_texture(&self, rng: &mut RandomSource, incidence: Vector, normal: Vector) -> LightInteraction
     {
         let _ = incidence;
-        let reflection_direction = rand_vector_in_half_sphere(rng, normal).normalize();
-        let colour_filter = Matrix::from_diag(&self.pigment);
+        let reflection_direction = weighted_rand_vector_on_half_sphere(rng, normal);
+        let colour_filter = Matrix::from_diag(&self.pigment.evaluate(self.location));
         LightInteraction {
             colour_matrix: Trans {
                 transformation: colour_filter,

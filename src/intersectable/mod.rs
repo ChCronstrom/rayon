@@ -12,7 +12,7 @@ use texture::TexturePoint;
 pub struct Intersection
 {
     pub t_value: f32,
-	pub position: Point,
+    pub position: Point,
     pub normal: Vector,
     pub texture: Box<TexturePoint>,
 }

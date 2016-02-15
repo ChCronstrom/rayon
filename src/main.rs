@@ -1,5 +1,6 @@
 extern crate image;
 extern crate nalgebra as na;
+extern crate num;
 extern crate rand;
 
 mod basics;
@@ -17,7 +18,7 @@ fn main()
 {
     println!("Making a scene ...");
     let scene = scene::example_scene();
-    let	mut renderer = Renderer::new(&scene);
+    let mut renderer = Renderer::new(&scene);
     let postprocessor = PostProcessor::new();
 
     println!("Rendering ...");

@@ -15,8 +15,8 @@ fn f32_to_u8(float: f32) -> u8
 fn post_process_pixel(pixel: Rgb<f32>) -> Rgb<u8>
 {
     Rgb { data: [ f32_to_u8(pixel.data[0]),
-                   f32_to_u8(pixel.data[1]),
-                   f32_to_u8(pixel.data[2]), ] }
+                  f32_to_u8(pixel.data[1]),
+                  f32_to_u8(pixel.data[2]), ] }
 }
 
 impl PostProcessor

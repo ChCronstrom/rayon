@@ -2,13 +2,16 @@ use std;
 
 use basics::*;
 use intersectable::{Intersection, Intersectable};
-use texture::Lambertian;
+use texture::*;
 
 use na;
 use na::{Norm};
 
 #[derive(Debug)]
-pub struct Sphere;
+pub struct Sphere
+{
+    pub texture: Box<Texture>,
+}
 
 impl Intersectable for Sphere
 {
@@ -70,7 +73,7 @@ impl Intersectable for Sphere
             t_value: t,
             position: position,
             normal: position.as_vec().normalize(),
-            texture: Box::new(Lambertian::new(Colour::new(0.8, 0.0, 0.2))),
+            texture: self.texture.evaluate_texture_point(position),
         });
     }
 }
