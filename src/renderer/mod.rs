@@ -5,6 +5,9 @@ use intersectable::Intersectable;
 use scene::Scene;
 
 use image::Rgb;
+use num::traits::Zero;
+
+use rand::Rng;
 
 pub struct Renderer<'a>
 {
@@ -34,6 +37,11 @@ impl<'a> Renderer<'a>
 
         for y in 0..self.height
         {
+            if (y % 100) == 0
+            {
+                println!("Rendering line {} of {}.", y, self.height);
+            }
+
             for x in 0..self.width
             {
                 let colour = self.render_pixel(x, y);
@@ -46,8 +54,14 @@ impl<'a> Renderer<'a>
 
     fn render_pixel(&mut self, pixel_x: u32, pixel_y: u32) -> Rgb<f32>
     {
-        let (x, y) = self.pixel_to_coord(pixel_x as f32, pixel_y as f32);
-        let colour = self.render_sample(x, y);
+        let mut accumulated_colour = Colour::zero();
+        for _ in 0..self.supersamples
+        {
+            let (x, y) = (pixel_x as f32 + self.rng.next_f32() - 0.5, pixel_y as f32 + self.rng.next_f32() - 0.5);
+            let (x, y) = self.pixel_to_coord(x, y);
+            accumulated_colour = accumulated_colour + self.render_sample(x, y);
+        }
+        let colour = accumulated_colour / self.supersamples as Float;
         return Rgb { data: *colour.as_ref() };
     }
 

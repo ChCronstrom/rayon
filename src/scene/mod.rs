@@ -19,7 +19,7 @@ pub fn example_scene() -> Scene
     let mut scene = Scene::new();
     scene.camera = Camera::from_position(Pnt3::new(0.1, -4.0, 0.9), Pnt3::new(0.0, 0.0, 1.0));
 
-    let gray_texture = Lambertian { pigment: Colour::new(0.9, 0.9, 0.99) };
+    let gray_texture = Lambertian { pigment: Colour::new(1.0, 1.0, 1.0) };
     let plane = Plane { texture: Box::new(gray_texture) };
     scene.objects.subobjects.push(Box::new(plane));
 
