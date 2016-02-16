@@ -5,6 +5,7 @@ use intersectable::Intersectable;
 use scene::Scene;
 
 use image::Rgb;
+use na;
 use num::traits::Zero;
 
 use rand::Rng;
@@ -83,14 +84,40 @@ impl<'a> Renderer<'a>
 
     fn render_ray(&mut self, ray: Ray) -> Colour
     {
+        // If the ray intersects something in the scene
         if let Some(intersection) = self.scene.objects.find_intersection(ray)
         {
-            let interaction = intersection.texture.evaluate_texture(&mut self.rng, ray.direction, intersection.normal);
-            let child_ray_colour = self.render_ray(Ray::new(intersection.position, interaction.child_ray));
-            return interaction.colour_matrix.transform_colour(child_ray_colour);
+            // If there was a texture at the intersection
+            if let Some(texture) = intersection.texture
+            {
+                let interaction = texture.evaluate_texture(&mut self.rng, ray.direction, intersection.normal);
+
+                // If the colour transformation matrix is non-zero, we spawn a child ray.
+                // TODO: Implement better ray cancellation criteria
+                if !na::is_zero(&interaction.colour_matrix.transformation)
+                {
+                    let child_ray_colour = self.render_ray(Ray::new(intersection.position, interaction.child_ray));
+                    return interaction.colour_matrix.transform_colour(child_ray_colour);
+                }
+
+                // Otherwise we just return the emissive component
+                else
+                {
+                    return interaction.colour_matrix.translation;
+                }
+            }
+
+            // If the intersection is untextured, I don't know, black I guess. Or panic!() works too.
+            else
+            {
+                return Colour::new(0.0, 0.0, 0.0);
+            }
         }
+
+        // If the ray doesn't intersect anything, return the background colour.
         else
         {
+            // TODO: Implement procedural backgrounds in the Scene object.
             return Colour::new(0.1, 0.1, 0.1);
         }
     }

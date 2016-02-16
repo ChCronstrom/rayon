@@ -8,10 +8,7 @@ use na;
 use na::{Norm};
 
 #[derive(Debug)]
-pub struct Sphere
-{
-    pub texture: Box<Texture>,
-}
+pub struct Sphere;
 
 impl Intersectable for Sphere
 {
@@ -73,7 +70,7 @@ impl Intersectable for Sphere
             t_value: t,
             position: position,
             normal: position.as_vec().normalize(),
-            texture: self.texture.evaluate_texture_point(position),
+            texture: None,
         });
     }
 }

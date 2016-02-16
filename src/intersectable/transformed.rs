@@ -6,9 +6,9 @@ use na::{Norm, Transpose};
 #[derive(Debug)]
 pub struct Transformed<T>
 {
+    primitive: T,
     transformation: Trans,
     inverse_transformation: Trans,
-    primitive: T,
 }
 
 impl<T: Intersectable> Transformed<T>

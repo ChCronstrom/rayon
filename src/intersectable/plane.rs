@@ -3,10 +3,7 @@ use intersectable::{Intersection, Intersectable};
 use texture::*;
 
 #[derive(Debug)]
-pub struct Plane
-{
-    pub texture: Box<Texture>,
-}
+pub struct Plane;
 
 impl Intersectable for Plane
 {
@@ -28,7 +25,7 @@ impl Intersectable for Plane
                 t_value: t_solution,
                 position: position,
                 normal: Vector::new(0.0, 0.0, 1.0),
-                texture: self.texture.evaluate_texture_point(position),
+                texture: None,
             })
         }
         else
