@@ -18,7 +18,7 @@ struct EmissivePoint<P: Pigment>
 
 impl<P: Pigment + 'static> Texture for Emissive<P>
 {
-    fn evaluate_texture_point(&self, location: Point) -> Box<TexturePoint>
+    fn evaluate_texture(&self, location: Point) -> Box<TexturePoint>
     {
         Box::new(EmissivePoint { colour: self.colour, location: location })
     }
@@ -26,7 +26,7 @@ impl<P: Pigment + 'static> Texture for Emissive<P>
 
 impl<P: Pigment> TexturePoint for EmissivePoint<P>
 {
-    fn evaluate_texture(&self, rng: &mut RandomSource, incidence: Vector, normal: Vector) -> LightInteraction
+    fn evaluate_texture_point(&self, rng: &mut RandomSource, incidence: Vector, normal: Vector) -> LightInteraction
     {
         let _ = rng;
         let _ = incidence;

@@ -19,10 +19,10 @@ pub struct LightInteraction
 
 pub trait TexturePoint: std::fmt::Debug
 {
-    fn evaluate_texture(&self, rng: &mut RandomSource, incidence: Vector, normal: Vector) -> LightInteraction;
+    fn evaluate_texture_point(&self, rng: &mut RandomSource, incidence: Vector, normal: Vector) -> LightInteraction;
 }
 
 pub trait Texture: std::fmt::Debug
 {
-    fn evaluate_texture_point(&self, location: Point) -> Box<TexturePoint>;
+    fn evaluate_texture(&self, location: Point) -> Box<TexturePoint>;
 }

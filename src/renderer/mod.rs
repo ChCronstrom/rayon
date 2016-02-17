@@ -90,7 +90,7 @@ impl<'a> Renderer<'a>
             // If there was a texture at the intersection
             if let Some(texture) = intersection.texture
             {
-                let interaction = texture.evaluate_texture(&mut self.rng, ray.direction, intersection.normal);
+                let interaction = texture.evaluate_texture_point(&mut self.rng, ray.direction, intersection.normal);
 
                 // If the colour transformation matrix is non-zero, we spawn a child ray.
                 // TODO: Implement better ray cancellation criteria

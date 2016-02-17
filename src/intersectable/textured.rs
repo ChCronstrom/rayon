@@ -28,7 +28,7 @@ impl<P: Intersectable, T: Texture> Intersectable for Textured<P, T>
         {
             if intersection.texture.is_none()
             {
-                intersection.texture = Some(self.texture.evaluate_texture_point(intersection.position))
+                intersection.texture = Some(self.texture.evaluate_texture(intersection.position))
             }
             Some(intersection)
         }
