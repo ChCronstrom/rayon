@@ -15,7 +15,7 @@ impl Ray
         Ray {
             origin: origin,
             direction: direction,
-            start: EPSILON,
+            start: 0.0001,
             stop: INFINITY,
         }
     }

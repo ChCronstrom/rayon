@@ -79,10 +79,10 @@ impl<'a> Renderer<'a>
     fn render_sample(&mut self, x: f32, y: f32) -> Colour
     {
         let ray = self.scene.camera.compute_ray(x, y);
-        return self.render_ray(ray);
+        return self.render_ray(ray, 0);
     }
 
-    fn render_ray(&mut self, ray: Ray) -> Colour
+    fn render_ray(&mut self, ray: Ray, count: u32) -> Colour
     {
         // If the ray intersects something in the scene
         if let Some(intersection) = self.scene.objects.find_intersection(ray)
@@ -94,9 +94,9 @@ impl<'a> Renderer<'a>
 
                 // If the colour transformation matrix is non-zero, we spawn a child ray.
                 // TODO: Implement better ray cancellation criteria
-                if !na::is_zero(&interaction.colour_matrix.transformation)
+                if !na::is_zero(&interaction.colour_matrix.transformation) && count < 100
                 {
-                    let child_ray_colour = self.render_ray(Ray::new(intersection.position, interaction.child_ray));
+                    let child_ray_colour = self.render_ray(Ray::new(intersection.position, interaction.child_ray), count + 1);
                     return interaction.colour_matrix.transform_colour(child_ray_colour);
                 }
 

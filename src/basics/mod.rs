@@ -4,7 +4,6 @@ mod ray;
 pub use basics::trans::Trans;
 pub use basics::ray::Ray;
 
-use std;
 use image;
 use na;
 use na::{Mat3, Norm, Vec3, Pnt3};
@@ -19,8 +18,8 @@ pub type Colour = Vec3<Float>;
 pub type HdrImage = image::ImageBuffer<image::Rgb<Float>, Vec<Float>>;
 pub type RandomSource = rand::Isaac64Rng;
 
-pub const EPSILON: Float = std::f32::EPSILON;
-pub const INFINITY: Float = std::f32::INFINITY;
+pub use std::f32::EPSILON;
+pub use std::f32::INFINITY;
 
 pub fn rand_vector_in_sphere<R: rand::Rng>(rng: &mut R) -> Vector
 {
@@ -90,6 +89,15 @@ pub fn invert(m: Matrix) -> Matrix
               inv_det * (m.m11 * m.m22 - m.m12 * m.m21))
 }
 
+pub fn calculate_projection_rejection(vector: Vector, project_onto: Vector) -> (Float, Vector, Vector)
+{
+    let dot = na::dot(&vector, &project_onto);
+    let cosine = dot / na::norm(&vector);
+    let projection = project_onto * cosine;
+    let rejection = vector - projection;
+    return (dot, projection, rejection);
+}
+
 #[cfg(test)]
 mod tests
 {
@@ -97,6 +105,7 @@ mod tests
 
     use na::*;
     use rand;
+    use rand::Rng;
 
     #[test]
     fn test_rand_vector_in_sphere()
@@ -160,6 +169,45 @@ mod tests
             let random_vector = rand_vector_in_half_sphere(&mut randomizer, direction);
             assert!(random_vector.norm() < 1.0);
             assert!(random_vector.z < 0.0);
+        }
+    }
+
+    #[test]
+    fn test_invert()
+    {
+        let mut randomizer = rand::thread_rng();
+
+        for _ in 0..100
+        {
+            let random_matrix = Mat3::new(2.0 * randomizer.next_f32() - 1.0,
+                                          2.0 * randomizer.next_f32() - 1.0,
+                                          2.0 * randomizer.next_f32() - 1.0,
+                                          2.0 * randomizer.next_f32() - 1.0,
+                                          2.0 * randomizer.next_f32() - 1.0,
+                                          2.0 * randomizer.next_f32() - 1.0,
+                                          2.0 * randomizer.next_f32() - 1.0,
+                                          2.0 * randomizer.next_f32() - 1.0,
+                                          2.0 * randomizer.next_f32() - 1.0);
+
+            let determinant = det(&random_matrix);
+            if determinant < 0.001 && determinant > -0.001
+            {
+                continue;
+            }
+
+            let inverse = invert(random_matrix);
+            let identity = random_matrix * inverse;
+
+            assert!(identity.m11.approx_eq_eps(&1.0, &1.0e-4));
+            assert!(identity.m22.approx_eq_eps(&1.0, &1.0e-4));
+            assert!(identity.m33.approx_eq_eps(&1.0, &1.0e-4));
+
+            assert!(identity.m12.approx_eq_eps(&0.0, &1.0e-4));
+            assert!(identity.m13.approx_eq_eps(&0.0, &1.0e-4));
+            assert!(identity.m21.approx_eq_eps(&0.0, &1.0e-4));
+            assert!(identity.m23.approx_eq_eps(&0.0, &1.0e-4));
+            assert!(identity.m31.approx_eq_eps(&0.0, &1.0e-4));
+            assert!(identity.m32.approx_eq_eps(&0.0, &1.0e-4));
         }
     }
 }
