@@ -5,6 +5,7 @@ extern crate rand;
 
 mod basics;
 mod camera;
+mod functions;
 mod intersectable;
 mod post;
 mod renderer;

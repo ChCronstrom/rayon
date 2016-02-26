@@ -1,15 +1,15 @@
 mod emissive;
 mod lambertian;
-mod pigment;
 mod glass;
 
 use std;
 
 use basics::*;
+use functions::Function;
 
+pub use functions::pigment::Pigment;
 pub use texture::emissive::Emissive;
 pub use texture::lambertian::Lambertian;
-pub use texture::pigment::Pigment;
 pub use texture::glass::Glass;
 
 #[derive(Copy, Clone, Debug)]

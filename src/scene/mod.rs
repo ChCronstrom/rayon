@@ -1,5 +1,6 @@
 use basics::*;
 use camera::Camera;
+use functions::Checker;
 use intersectable::*;
 use texture::*;
 
@@ -36,9 +37,9 @@ pub fn example_scene() -> Scene
     let mut scene = Scene::new();
     scene.camera = Camera::from_position(Pnt3::new(0.1, -4.0, 0.9), Pnt3::new(0.0, 0.0, 1.0));
 
-    let gray_texture = Lambertian::new(Colour::new(1.0, 1.0, 1.0));
+    let gray_texture = Lambertian::new(Checker::new(Colour::new(1.0, 1.0, 1.0), Colour::new(0.5, 0.5, 0.6)));
     let glass_texture = Glass::new(1.5);
-    let emissive_texture = Emissive { colour: Colour::new(10.0, 10.0, 10.0) };
+    let emissive_texture = Emissive { colour: Colour::new(22.0, 20.0, 20.0) };
 
     let plane = Textured::new(Plane, gray_texture);
     scene.objects.subobjects.push(Box::new(plane));
@@ -52,6 +53,7 @@ pub fn example_scene() -> Scene
 
     return scene;
 }
+
 
 impl Scene
 {
