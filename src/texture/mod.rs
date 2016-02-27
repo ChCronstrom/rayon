@@ -5,7 +5,6 @@ mod glass;
 use std;
 
 use basics::*;
-use functions::Function;
 
 pub use functions::pigment::Pigment;
 pub use texture::emissive::Emissive;

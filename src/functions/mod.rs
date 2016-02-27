@@ -1,7 +1,7 @@
 pub mod pigment;
-mod checker;
+mod chequered;
 
-pub use self::checker::Checker;
+pub use self::chequered::Chequered;
 
 use std;
 

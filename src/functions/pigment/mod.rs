@@ -1,8 +1,6 @@
 use super::*;
 use basics::*;
 
-use std;
-
 pub trait Pigment: Function<Point, Colour> { }
 
 impl<T: Function<Point, Colour>> Pigment for T { }

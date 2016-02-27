@@ -9,6 +9,9 @@ fn f32_to_u8(float: f32) -> u8
              else if float < 0.0 { 0.0 }
              else { float };
 
+    // TODO: Figure out how to gamma properly
+    //let gamma_corrected = clamped.powf(1.0 / 2.2);
+
     (255.0 * clamped).round() as u8
 }
 

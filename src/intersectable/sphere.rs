@@ -2,7 +2,6 @@ use std;
 
 use basics::*;
 use intersectable::{Intersection, Intersectable};
-use texture::*;
 
 use na;
 use na::{Norm};

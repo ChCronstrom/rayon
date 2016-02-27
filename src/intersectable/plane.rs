@@ -1,6 +1,5 @@
 use basics::*;
 use intersectable::{Intersection, Intersectable};
-use texture::*;
 
 #[derive(Debug)]
 pub struct Plane;

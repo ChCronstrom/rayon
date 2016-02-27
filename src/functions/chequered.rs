@@ -1,29 +1,28 @@
 use basics::*;
 use super::*;
 
-use std;
 use std::fmt::Debug;
 
 #[derive(Clone, Copy, Debug)]
-pub struct Checker<T>
+pub struct Chequered<T>
 {
     even: T,
     odd: T,
 }
 
-impl<T> Checker<T>
+impl<T> Chequered<T>
     where T: Copy + Debug
 {
-    pub fn new(even: T, odd: T) -> Checker<T>
+    pub fn new(even: T, odd: T) -> Chequered<T>
     {
-        Checker {
+        Chequered {
             even: even,
             odd: odd,
         }
     }
 }
 
-impl<T> Function<Point, T> for Checker<T>
+impl<T> Function<Point, T> for Chequered<T>
     where T: Copy + Debug
 {
     fn evaluate(&self, parameter: Point) -> T
