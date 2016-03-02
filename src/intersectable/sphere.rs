@@ -64,12 +64,6 @@ impl Intersectable for Sphere
         }
 
         let position = ray.evaluate(t);
-        return Some(Intersection
-        {
-            t_value: t,
-            position: position,
-            normal: position.as_vec().normalize(),
-            texture: None,
-        });
+        return Some(Intersection::new(t, position, position.as_vec().normalize()));
     }
 }

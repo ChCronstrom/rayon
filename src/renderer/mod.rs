@@ -2,10 +2,12 @@ extern crate image;
 
 use basics::*;
 use intersectable::Intersectable;
+use medium::Medium;
 use scene::Scene;
 
 use image::Rgb;
 use na;
+use na::{Diag, Norm};
 use num::traits::Zero;
 
 use rand::Rng;
@@ -78,47 +80,102 @@ impl<'a> Renderer<'a>
 
     fn render_sample(&mut self, x: f32, y: f32) -> Colour
     {
-        let ray = self.scene.camera.compute_ray(x, y);
-        return self.render_ray(ray, 0);
-    }
+        let mut ray = self.scene.camera.compute_ray(x, y);
+        let mut medium = Medium::default(); // TODO: Implement atmospheric media
+        let mut colour_matrix = Trans::default();
+        let mut reflection_count = 0u32;
 
-    fn render_ray(&mut self, ray: Ray, count: u32) -> Colour
-    {
-        // If the ray intersects something in the scene
-        if let Some(intersection) = self.scene.objects.find_intersection(ray)
+        loop
         {
-            // If there was a texture at the intersection
-            if let Some(texture) = intersection.texture
+            // If the ray intersects something in the scene
+            if let Some(intersection) = self.scene.objects.find_intersection(ray)
             {
-                let interaction = texture.evaluate_texture_point(&mut self.rng, ray.direction, intersection.normal);
-
-                // If the colour transformation matrix is non-zero, we spawn a child ray.
-                // TODO: Implement better ray cancellation criteria
-                if !na::is_zero(&interaction.colour_matrix.transformation) && count < 100
+                // First process the emissive and absorptive media that we've travelled through
+                match (medium.emission, medium.absorption)
                 {
-                    let child_ray_colour = self.render_ray(Ray::new(intersection.position, interaction.child_ray), count + 1);
-                    return interaction.colour_matrix.transform_colour(child_ray_colour);
+                    (Some(emission), Some(absorption)) => {
+                        let distance_travelled = ray.direction.norm() * intersection.t_value;
+                        // c := (c + e/k) * exp(kx) - e/k
+                        // c := c * exp(kx) + e/k * exp(kx) - e/k
+                        // Transformation is exp(kx) diagonal matrix
+                        // Translation is (exp(kx) - 1) * e/k if k ≠ 0, e otherwise. We try to keep
+                        // as much as possible of this operation vectorized.
+                        let kx = absorption * distance_travelled;
+                        let exp_kx = Vector::new(kx.x.exp(), kx.y.exp(), kx.z.exp());
+                        let translation = (exp_kx + Vector::new(-1.0, -1.0, -1.0)) * (emission / absorption);
+                        let translation = Vector::new(
+                            if absorption.x == 0.0 { emission.x } else { translation.x },
+                            if absorption.y == 0.0 { emission.y } else { translation.y },
+                            if absorption.z == 0.0 { emission.z } else { translation.z },
+                        );
+
+                        colour_matrix = colour_matrix * Trans {
+                            transformation: Matrix::from_diag(&exp_kx),
+                            translation: translation,
+                        };
+                    },
+                    (Some(emission), None) => {
+                        let distance_travelled = ray.direction.norm() * intersection.t_value;
+                        let colour_to_add = emission * distance_travelled;
+                        // TODO: Optimization possible; use the fact that only the translation
+                        // component changes. t := A * emission + t
+                        colour_matrix = colour_matrix * Trans::new_translation_vector(colour_to_add);
+                    },
+                    (None, Some(absorption)) => {
+                        let distance_travelled = ray.direction.norm() * intersection.t_value;
+                        // c := exp(kx) * c
+                        let kx = absorption * distance_travelled;
+                        let exp_kx = Vector::new(kx.x.exp(), kx.y.exp(), kx.z.exp());
+                        colour_matrix = colour_matrix * Trans::from_diagonal(exp_kx);
+                    },
+                    (None, None) => ()
                 }
 
-                // Otherwise we just return the emissive component
+                // If there was a texture at the intersection
+                if let Some(texture) = intersection.texture
+                {
+                    let interaction = texture.evaluate_texture_point(&mut self.rng, ray.direction, intersection.normal);
+
+                    // Accumulated colour matrix
+                    colour_matrix = colour_matrix * interaction.colour_matrix;
+
+                    // Stopping criteria:
+                    // 1. If the aggregate colour transformation matrix is zero, we can stop immediately.
+                    // 2. If we have surpassed 100 iterations, we can also stop.
+                    // TODO: Implement more ray cancellation criteria
+                    if na::is_zero(&colour_matrix.transformation) || reflection_count > 100
+                    {
+                        return colour_matrix.translation;
+                    }
+
+                    // Otherwise we spawn a child ray
+                    ray = Ray::new(intersection.position, interaction.child_ray);
+                    medium = if na::dot(&interaction.child_ray, &intersection.normal) > 0.0
+                    {
+                        intersection.outside
+                    }
+                    else
+                    {
+                        intersection.inside
+                    };
+                }
+
+                // If there was no texture at the intersection just keep going in the same direction.
                 else
                 {
-                    return interaction.colour_matrix.translation;
+                    ray = Ray::new(intersection.position, ray.direction);
                 }
+
+                reflection_count += 1;
             }
 
-            // If the intersection is untextured, I don't know, black I guess. Or panic!() works too.
+            // If the ray doesn't intersect anything, return the background colour.
             else
             {
-                return Colour::new(0.0, 0.0, 0.0);
+                // TODO: Implement procedural backgrounds in the Scene object.
+                return colour_matrix.transform_colour(Colour::new(0.1, 0.1, 0.1));
+                //return colour_matrix.transform_colour(Colour::new(0.0, 0.0, 0.0));
             }
-        }
-
-        // If the ray doesn't intersect anything, return the background colour.
-        else
-        {
-            // TODO: Implement procedural backgrounds in the Scene object.
-            return Colour::new(0.1, 0.1, 0.1);
         }
     }
 }

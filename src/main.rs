@@ -7,6 +7,7 @@ mod basics;
 mod camera;
 mod functions;
 mod intersectable;
+mod medium;
 mod post;
 mod renderer;
 mod scene;
