@@ -1,8 +1,10 @@
-mod trans;
 mod ray;
+mod solvers;
+mod trans;
 
-pub use basics::trans::Trans;
-pub use basics::ray::Ray;
+pub use self::trans::Trans;
+pub use self::ray::Ray;
+pub use self::solvers::solve_quadratic;
 
 use image;
 use na;
