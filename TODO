@@ -1,0 +1,46 @@
+Stuff that needs doing, in no particular order
+
+* Functions
+    - Simplex noise
+    - Loading images
+        - depends on: Scene-global resources
+    - Expressions
+* Constructive solid geometry
+    - Merges
+    - Intersections
+        - figure out new name for them, because of `intersectable::Intersection`
+    - Differences (clipping)
+    - Other interesting constructions
+        - Dilations (Minkowski addition), Erosions, Openings, Closings?
+    - depends on: IsInside function
+* BVH accelerator
+    - depends on: Bounding boxes
+* Bounding boxes
+* Scene-global resources
+    - i.e. Scene holds images, reusables, etc, with a lifetime. Other scene
+      objects can hold references to these objects.
+* Participating media
+* Possibly a better medium infrastructure.
+* Sky pigment
+* More intersectables!
+    - Cube
+    - Triangle
+    - Iso-surface
+    - Height field
+    - Swept sphere
+    - Swept curve (lathe)
+    - ...
+* IsInside function on Intersectable trait
+* Multi-threading optimization
+* Vectorization optimization
+* Scene loading
+    - parse scene description
+    - scene pre-processor
+* Image post-processing
+    - gamma correction
+    - save as HDR
+* Mesh loading
+    - depends on: Triangles, BVH accelerator
+* Scene serialization/deserialization
+* Grid rendering
+    - depends on: Scene serialization/deserialization
