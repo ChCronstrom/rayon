@@ -1,5 +1,6 @@
 pub mod pigment;
 mod chequered;
+mod noise;
 
 pub use self::chequered::Chequered;
 

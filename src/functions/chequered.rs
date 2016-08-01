@@ -27,9 +27,9 @@ impl<T> Function<Point, T> for Chequered<T>
 {
     fn evaluate(&self, parameter: Point) -> T
     {
-        let x_is_odd = parameter.x.floor() as i64 % 2 != 0;
-        let y_is_odd = parameter.y.floor() as i64 % 2 != 0;
-        let z_is_odd = (parameter.z + 1E-6).floor() as i64 % 2 != 0;
+        let x_is_odd = parameter.x.round() as i64 % 2 != 0;
+        let y_is_odd = parameter.y.round() as i64 % 2 != 0;
+        let z_is_odd = parameter.z.round() as i64 % 2 != 0;
 
         if x_is_odd ^ y_is_odd ^ z_is_odd
         {
