@@ -100,6 +100,17 @@ pub fn calculate_projection_rejection(vector: Vector, project_onto: Vector) -> (
     return (dot, projection, rejection);
 }
 
+/// Make a value live forever, returning a static reference to it.
+///
+/// The returned immutable reference has static lifetime, and will live for the remainder of the
+/// program execution. If the last reference is dropped, the memory held by the value will leak.
+pub fn live_forever<T>(value: T) -> &'static T
+{
+    let boxed = Box::new(value);
+    let raw_pointer = Box::into_raw(boxed);
+    unsafe { &*raw_pointer }
+}
+
 #[cfg(test)]
 mod tests
 {

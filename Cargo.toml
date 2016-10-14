@@ -5,6 +5,9 @@ authors = ["christoffer"]
 
 [dependencies]
 image = "0.6.1"
+lazy_static = "0.2.1"
 nalgebra = "0.5.1"
+noise = "0.2.0"
 num = "0.1.30"
 rand = "0.3.13"
+typenum = "1.3.2"
