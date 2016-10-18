@@ -16,22 +16,22 @@ pub use self::union::Union;
 
 use basics::*;
 use medium::Medium;
-use texture::TexturePoint;
+use texture::Texture;
 
 #[derive(Debug)]
-pub struct Intersection
+pub struct Intersection<'a>
 {
     pub t_value: Float,
     pub position: Point,
     pub normal: Vector,
-    pub texture: Option<Box<TexturePoint>>,
+    pub texture: Option<&'a Texture>,
     pub outside: Medium,
     pub inside: Medium,
 }
 
-impl Intersection
+impl<'a> Intersection<'a>
 {
-    pub fn new(t_value: Float, position: Point, normal: Vector) -> Intersection
+    pub fn new(t_value: Float, position: Point, normal: Vector) -> Intersection<'a>
     {
         Intersection {
             t_value: t_value,

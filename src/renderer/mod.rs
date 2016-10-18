@@ -134,7 +134,7 @@ impl<'a> Renderer<'a>
                 // If there was a texture at the intersection
                 if let Some(texture) = intersection.texture
                 {
-                    let interaction = texture.evaluate_texture_point(&mut self.rng, ray.direction, intersection.normal);
+                    let interaction = texture.evaluate_texture(&mut self.rng, intersection.position, ray.direction, intersection.normal);
 
                     // Accumulated colour matrix
                     colour_matrix = colour_matrix * interaction.colour_matrix;

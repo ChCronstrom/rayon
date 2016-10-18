@@ -3,30 +3,15 @@ use super::*;
 
 use num::Zero;
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub struct Emissive<P: Pigment>
 {
     pub colour: P,
 }
 
-#[derive(Clone, Copy, Debug)]
-struct EmissivePoint<P: Pigment>
+impl<P: Pigment> Texture for Emissive<P>
 {
-    pub colour: P,
-    pub location: Point,
-}
-
-impl<P: Pigment + 'static> Texture for Emissive<P>
-{
-    fn evaluate_texture(&self, location: Point) -> Box<TexturePoint>
-    {
-        Box::new(EmissivePoint { colour: self.colour, location: location })
-    }
-}
-
-impl<P: Pigment> TexturePoint for EmissivePoint<P>
-{
-    fn evaluate_texture_point(&self, rng: &mut RandomSource, incidence: Vector, normal: Vector) -> LightInteraction
+    fn evaluate_texture(&self, rng: &mut RandomSource, location: Point, incidence: Vector, normal: Vector) -> LightInteraction
     {
         let _ = rng;
         let _ = incidence;
@@ -35,7 +20,7 @@ impl<P: Pigment> TexturePoint for EmissivePoint<P>
         LightInteraction {
             colour_matrix: Trans {
                 transformation: Matrix::zero(),
-                translation: self.colour.evaluate(self.location),
+                translation: self.colour.evaluate(location),
             },
             child_ray: Vector::zero(),
         }

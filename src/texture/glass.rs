@@ -1,5 +1,5 @@
 use basics::*;
-use texture::{Texture, TexturePoint, LightInteraction};
+use texture::{Texture, LightInteraction};
 
 use na::{Norm};
 use rand::{Rand};
@@ -22,18 +22,10 @@ impl Glass
 
 impl Texture for Glass
 {
-    fn evaluate_texture(&self, location: Point) -> Box<TexturePoint>
+    fn evaluate_texture(&self, rng: &mut RandomSource, location: Point, incidence: Vector, normal: Vector) -> LightInteraction
     {
         let _ = location;
 
-        Box::new(*self)
-    }
-}
-
-impl TexturePoint for Glass
-{
-    fn evaluate_texture_point(&self, rng: &mut RandomSource, incidence: Vector, normal: Vector) -> LightInteraction
-    {
         // TODO: Ray should carry information about the medium it is travelling through, to allow for
         // nested media, with two differing indices of refraction.
 

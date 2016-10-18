@@ -1,6 +1,6 @@
 use basics::*;
 use camera::Camera;
-use functions::{Chequered, Function};
+use functions::{Chequered, ClosureFunction, Function};
 use functions::noise::{VectorNoise};
 use intersectable::*;
 use medium::Medium;
@@ -40,11 +40,12 @@ pub fn example_scene() -> Scene
     scene.camera = Camera::from_position(Pnt3::new(0.1, -4.0, 1.2), Pnt3::new(0.0, 0.0, 1.0));
 
     //let gray_texture = Lambertian::new(Chequered::new(Colour::new(1.0, 1.0, 1.0), Colour::new(0.5, 0.5, 0.6)));
-    let gray_texture = Lambertian::new(VectorNoise::new(0, 0.5));
+    let random_texture = VectorNoise::new(0, 0.5);
+    let test_texture = Lambertian::new(ClosureFunction::new(move |p| random_texture.evaluate(p) * 0.5 + 0.5));
     let glass_texture = Glass::new(1.5);
     let emissive_texture = Emissive { colour: Colour::new(22.0, 20.0, 20.0) };
 
-    let plane = Textured::new(Plane, gray_texture);
+    let plane = Textured::new(Plane, test_texture);
     scene.objects.subobjects.push(Box::new(plane));
 
     let sphere = Transformed::new(Textured::new(Sphere, emissive_texture), Trans::new_translation(9.0, 2.0, 9.0));

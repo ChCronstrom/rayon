@@ -45,7 +45,7 @@ impl<P: Intersectable, T: Texture> Intersectable for Textured<P, T>
             intersection.outside = self.outside;
             if intersection.texture.is_none()
             {
-                intersection.texture = Some(self.texture.evaluate_texture(intersection.position))
+                intersection.texture = Some(&self.texture)
             }
             Some(intersection)
         }
