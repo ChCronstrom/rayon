@@ -52,7 +52,6 @@ impl ElementalNoise
     {
         // Every octave has twice the frequency of the octave below, and omega times the amplitude.
         let mut amplitude: Float = 1.0;
-        let mut frequency: Float = 1.0;
         let mut point = parameter;
         let mut result: Float = 0.0;
 
@@ -61,7 +60,7 @@ impl ElementalNoise
             let seed = self.permutation_tables[i];//.expect("Failed to find the permutation table.");
             result += amplitude * noise::open_simplex3(seed, point.as_ref());
             point = point * 2.0;
-            amplitude = amplitude * self.omega;
+            amplitude *= self.omega;
         }
 
         result

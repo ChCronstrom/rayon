@@ -1,5 +1,3 @@
-use std;
-
 use basics::*;
 
 use na;
@@ -41,7 +39,7 @@ impl Camera
             transformation: Trans
             {
                 transformation: transformation,
-                translation: position.to_vec(),
+                translation: position.to_vector(),
             }
         }
     }
@@ -50,10 +48,10 @@ impl Camera
     {
         Ray
         {
-            origin: self.transformation.translation.to_pnt(),
-            direction: (self.transformation * na::Vec3::new(x, 1.0, y)).normalize(),
-            start: std::f32::EPSILON,
-            stop: std::f32::INFINITY,
+            origin: self.transformation.translation.to_point(),
+            direction: (self.transformation * Vector::new(x, 1.0, y)).normalize(),
+            start: EPSILON,
+            stop: INFINITY,
         }
     }
 }

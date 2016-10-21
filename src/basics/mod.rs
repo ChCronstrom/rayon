@@ -9,20 +9,21 @@ pub use self::solvers::solve_quadratic;
 use std;
 use image;
 use na;
-use na::{Mat3, Norm, Vec3, Pnt3};
+use na::{Inverse, Matrix3, Norm, Vector3, Point3};
 use rand;
 use rand::Rand;
 
 pub type Float = f32;
-pub type Vector = Vec3<Float>;
-pub type Point = Pnt3<Float>;
-pub type Matrix = Mat3<Float>;
-pub type Colour = Vec3<Float>;
+pub type Vector = Vector3<Float>;
+pub type Point = Point3<Float>;
+pub type Matrix = Matrix3<Float>;
+pub type Colour = Vector3<Float>;
 pub type HdrImage = image::ImageBuffer<image::Rgb<Float>, Vec<Float>>;
 pub type RandomSource = rand::Isaac64Rng;
 
 pub use std::f32::EPSILON;
 pub use std::f32::INFINITY;
+pub use std::f32::NAN;
 
 pub fn rand_vector_in_sphere<R: rand::Rng>(rng: &mut R) -> Vector
 {
@@ -30,7 +31,7 @@ pub fn rand_vector_in_sphere<R: rand::Rng>(rng: &mut R) -> Vector
     {
         let (x, y, z): (Float, Float, Float) = Rand::rand(rng);
         let result = Vector::new(2.0 * x - 1.0, 2.0 * y - 1.0, 2.0 * z - 1.0);
-        if result.sqnorm() < 1.0
+        if result.norm_squared() < 1.0
         {
             return result;
         }
@@ -76,20 +77,7 @@ pub fn weighted_rand_vector_on_half_sphere<R: rand::Rng>(rng: &mut R, direction:
 
 pub fn invert(m: Matrix) -> Matrix
 {
-    let determinant = na::det(&m);
-    let inv_det = 1.0 / determinant;
-
-    Mat3::new(inv_det * (m.m22 * m.m33 - m.m23 * m.m32),
-              inv_det * (m.m13 * m.m32 - m.m12 * m.m33),
-              inv_det * (m.m12 * m.m23 - m.m13 * m.m22),
-
-              inv_det * (m.m23 * m.m31 - m.m21 * m.m33),
-              inv_det * (m.m11 * m.m33 - m.m13 * m.m31),
-              inv_det * (m.m13 * m.m21 - m.m11 * m.m23),
-
-              inv_det * (m.m21 * m.m32 - m.m22 * m.m31),
-              inv_det * (m.m12 * m.m31 - m.m11 * m.m32),
-              inv_det * (m.m11 * m.m22 - m.m12 * m.m21))
+    Inverse::inverse(&m).unwrap_or(Matrix::new(NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN))
 }
 
 pub fn calculate_projection_rejection(vector: Vector, project_onto: Vector) -> (Float, Vector, Vector)
@@ -208,7 +196,7 @@ mod tests
                                           2.0 * randomizer.next_f32() - 1.0,
                                           2.0 * randomizer.next_f32() - 1.0);
 
-            let determinant = det(&random_matrix);
+            let determinant = determinant(&random_matrix);
             if determinant < 0.001 && determinant > -0.001
             {
                 continue;

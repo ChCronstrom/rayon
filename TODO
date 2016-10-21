@@ -30,9 +30,9 @@ Stuff that needs doing, in no particular order
     - Swept sphere
     - Swept curve (lathe)
     - ...
-* IsInside function on Intersectable trait
+* IsInside function on SolidIntersectable trait ✓
 * Multi-threading optimization
-* Vectorization optimization
+* Vectorization optimization ✓
 * Scene loading
     - parse scene description
     - scene pre-processor

@@ -3,7 +3,7 @@ use std;
 use basics::*;
 
 use na;
-use na::Diag;
+use na::Diagonal;
 
 #[derive(Copy, Clone, Debug)]
 pub struct Trans
@@ -29,7 +29,7 @@ impl Trans
     pub fn from_diagonal(diagnonal: Vector) -> Trans
     {
         Trans {
-            transformation: Matrix::from_diag(&diagnonal),
+            transformation: Matrix::from_diagonal(&diagnonal),
             translation: na::zero(),
         }
     }
@@ -48,7 +48,7 @@ impl Trans
 
     pub fn transform_colour(self, rhs: Colour) -> Colour
     {
-        (self * rhs.to_pnt()).to_vec()
+        (self * rhs.to_point()).to_vector()
     }
 }
 

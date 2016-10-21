@@ -1,7 +1,7 @@
 use basics::*;
 use super::*;
 
-use na::{Diag};
+use na::Diagonal;
 
 #[derive(Clone, Copy, Debug)]
 pub struct Lambertian<P: Pigment>
@@ -25,7 +25,7 @@ impl<P: Pigment> Texture for Lambertian<P>
     {
         let _ = incidence;
         let reflection_direction = weighted_rand_vector_on_half_sphere(rng, normal);
-        let colour_filter = Matrix::from_diag(&self.pigment.evaluate(location));
+        let colour_filter = Matrix::from_diagonal(&self.pigment.evaluate(location));
         LightInteraction {
             colour_matrix: Trans {
                 transformation: colour_filter,

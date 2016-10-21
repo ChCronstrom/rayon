@@ -28,9 +28,9 @@ impl Intersectable for Sphere
         //     ± sqrt( (dot(origin, direction)/norm²(direction))² - norm²(origin)/norm²(direction) + 1 )
         //     [ call these a ± sqrt(b) ]
 
-        let norm_direction_sq = na::sqnorm(&ray.direction);
-        let norm_origin_sq = na::sqnorm(ray.origin.as_vec());
-        let origin_dot_direction = na::dot(&ray.direction, ray.origin.as_vec());
+        let norm_direction_sq = na::norm_squared(&ray.direction);
+        let norm_origin_sq = na::norm_squared(ray.origin.as_vector());
+        let origin_dot_direction = na::dot(&ray.direction, ray.origin.as_vector());
 
         // b = (dot(origin, direction)/norm²(direction))² - norm²(origin)/norm²(direction) + 1
         //   = dot(origin, direction)² / norm²(direction)² - norm²(origin)/norm²(direction) + 1
@@ -64,7 +64,7 @@ impl Intersectable for Sphere
         }
 
         let position = ray.evaluate(t);
-        return Some(Intersection::new(t, position, position.as_vec().normalize()));
+        return Some(Intersection::new(t, position, position.as_vector().normalize()));
     }
 }
 
@@ -72,6 +72,6 @@ impl SolidIntersectable for Sphere
 {
     fn contains(&self, point: Point) -> bool
     {
-        na::sqnorm((&point).as_vec()) < 1.0
+        na::norm_squared((&point).as_vector()) < 1.0
     }
 }

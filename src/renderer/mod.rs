@@ -7,7 +7,7 @@ use scene::Scene;
 
 use image::Rgb;
 use na;
-use na::{Diag, Norm};
+use na::{Diagonal, Norm};
 use num::traits::Zero;
 
 use rand::Rng;
@@ -110,7 +110,7 @@ impl<'a> Renderer<'a>
                         );
 
                         colour_matrix = colour_matrix * Trans {
-                            transformation: Matrix::from_diag(&exp_kx),
+                            transformation: Matrix::from_diagonal(&exp_kx),
                             translation: translation,
                         };
                     },

@@ -1,8 +1,7 @@
 use super::*;
 use basics::*;
 use std::collections::BTreeMap;
-use std::ops::DerefMut;
-use std::sync::{Mutex, MutexGuard};
+use std::sync::{Mutex};
 use noise::Seed;
 use rand::{Rng, SeedableRng, XorShiftRng};
 

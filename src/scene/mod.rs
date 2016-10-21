@@ -6,8 +6,6 @@ use intersectable::*;
 use medium::Medium;
 use texture::*;
 
-use na::Pnt3;
-
 pub struct Scene
 {
     pub objects: Union,
@@ -17,7 +15,7 @@ pub struct Scene
 /*pub fn example_scene() -> Scene
 {
     let mut scene = Scene::new();
-    scene.camera = Camera::from_position(Pnt3::new(0.1, -4.0, 0.9), Pnt3::new(0.0, 0.0, 1.0));
+    scene.camera = Camera::from_position(Point::new(0.1, -4.0, 0.9), Point::new(0.0, 0.0, 1.0));
 
     let gray_texture = Lambertian { pigment: Colour::new(1.0, 1.0, 1.0) };
     let plane = Textured::new(Plane, gray_texture);
@@ -37,7 +35,7 @@ pub struct Scene
 pub fn example_scene() -> Scene
 {
     let mut scene = Scene::new();
-    scene.camera = Camera::from_position(Pnt3::new(0.1, -4.0, 1.2), Pnt3::new(0.0, 0.0, 1.0));
+    scene.camera = Camera::from_position(Point::new(0.1, -4.0, 1.2), Point::new(0.0, 0.0, 1.0));
 
     //let gray_texture = Lambertian::new(Chequered::new(Colour::new(1.0, 1.0, 1.0), Colour::new(0.5, 0.5, 0.6)));
     let random_texture = VectorNoise::new(0, 0.5);

@@ -22,8 +22,8 @@ impl Intersectable for Cylinder
         let d_mod = Vector::new(ray.direction.x, ray.direction.y, 0.0);
         let o_mod = Vector::new(ray.origin.x, ray.origin.y, 0.0);
 
-        let d_norm_sq = na::sqnorm(&d_mod);
-        let o_norm_sq = na::sqnorm(&o_mod);
+        let d_norm_sq = na::norm_squared(&d_mod);
+        let o_norm_sq = na::norm_squared(&o_mod);
         let o_dot_d = na::dot(&o_mod, &d_mod);
         let p = (2.0 * o_dot_d) / d_norm_sq;
         let q = (o_norm_sq - 1.0) / d_norm_sq;
@@ -51,7 +51,7 @@ impl Intersectable for Cylinder
 
         let position = ray.evaluate(t);
         let normal = {
-            let mut normal = *position.as_vec();
+            let mut normal = *position.as_vector();
             normal.z = 0.0;
             normal.normalize()
         };
