@@ -1,13 +1,13 @@
 Stuff that needs doing, in no particular order
 
 * Functions
-    - Simplex noise
+    - Simplex noise ✓
     - Loading images
         - depends on: Scene-global resources
     - Expressions
 * Constructive solid geometry
     - Merges
-    - Intersections
+    - Intersections ✓
         - figure out new name for them, because of `intersectable::Intersection`
     - Differences (clipping)
     - Other interesting constructions

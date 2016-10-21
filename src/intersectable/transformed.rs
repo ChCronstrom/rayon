@@ -1,5 +1,5 @@
-use basics::{Ray, Trans};
-use intersectable::{Intersection, Intersectable};
+use basics::*;
+use intersectable::{Intersection, Intersectable, SolidIntersectable};
 
 use na::{Norm, Transpose};
 
@@ -38,5 +38,13 @@ impl<T: Intersectable> Intersectable for Transformed<T>
         {
             None
         }
+    }
+}
+
+impl<T: SolidIntersectable> SolidIntersectable for Transformed<T>
+{
+    fn contains(&self, point: Point) -> bool
+    {
+        self.primitive.contains(self.inverse_transformation * point)
     }
 }

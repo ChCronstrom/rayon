@@ -1,5 +1,5 @@
 use basics::*;
-use intersectable::{Intersectable, Intersection};
+use intersectable::{Intersectable, Intersection, SolidIntersectable};
 use medium::Medium;
 use texture::Texture;
 
@@ -53,5 +53,13 @@ impl<P: Intersectable, T: Texture> Intersectable for Textured<P, T>
         {
             None
         }
+    }
+}
+
+impl<P: SolidIntersectable, T: Texture> SolidIntersectable for Textured<P, T>
+{
+    fn contains(&self, point: Point) -> bool
+    {
+        self.primitive.contains(point)
     }
 }

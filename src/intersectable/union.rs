@@ -11,8 +11,7 @@ impl Union
 {
     pub fn new() -> Union
     {
-        Union
-        {
+        Union {
             subobjects: Vec::new(),
         }
     }

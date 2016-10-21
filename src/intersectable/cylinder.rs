@@ -1,5 +1,5 @@
 use basics::*;
-use intersectable::{Intersection, Intersectable};
+use intersectable::{Intersection, Intersectable, SolidIntersectable};
 
 use na;
 use na::{Norm};
@@ -57,5 +57,13 @@ impl Intersectable for Cylinder
         };
 
         return Some(Intersection::new(t, position, normal));
+    }
+}
+
+impl SolidIntersectable for Cylinder
+{
+    fn contains(&self, point: Point) -> bool
+    {
+        point.x * point.x + point.y * point.y < 1.0
     }
 }

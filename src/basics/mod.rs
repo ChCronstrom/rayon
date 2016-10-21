@@ -6,6 +6,7 @@ pub use self::trans::Trans;
 pub use self::ray::Ray;
 pub use self::solvers::solve_quadratic;
 
+use std;
 use image;
 use na;
 use na::{Mat3, Norm, Vec3, Pnt3};
@@ -109,6 +110,11 @@ pub fn live_forever<T>(value: T) -> &'static T
     let boxed = Box::new(value);
     let raw_pointer = Box::into_raw(boxed);
     unsafe { &*raw_pointer }
+}
+
+pub fn enumerate<T: IntoIterator>(iterator: T) -> std::iter::Enumerate<<T as IntoIterator>::IntoIter>
+{
+    iterator.into_iter().enumerate()
 }
 
 #[cfg(test)]

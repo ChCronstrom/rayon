@@ -1,5 +1,5 @@
 use basics::*;
-use intersectable::{Intersection, Intersectable};
+use intersectable::{Intersection, Intersectable, SolidIntersectable};
 
 #[derive(Debug)]
 pub struct Plane;
@@ -25,5 +25,13 @@ impl Intersectable for Plane
         {
             None
         }
+    }
+}
+
+impl SolidIntersectable for Plane
+{
+    fn contains(&self, point: Point) -> bool
+    {
+        point.z < 0.0
     }
 }

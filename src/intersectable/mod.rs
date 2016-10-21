@@ -1,11 +1,12 @@
 use std;
 
+pub mod csg;
+mod cylinder;
 mod plane;
 mod sphere;
 mod textured;
 mod transformed;
 mod union;
-mod cylinder;
 
 pub use self::cylinder::Cylinder;
 pub use self::plane::Plane;
@@ -47,4 +48,9 @@ impl<'a> Intersection<'a>
 pub trait Intersectable: std::fmt::Debug
 {
     fn find_intersection(&self, ray: Ray) -> Option<Intersection>;
+}
+
+pub trait SolidIntersectable: Intersectable
+{
+    fn contains(&self, point: Point) -> bool;
 }

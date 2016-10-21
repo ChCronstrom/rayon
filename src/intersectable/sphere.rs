@@ -1,7 +1,7 @@
 use std;
 
 use basics::*;
-use intersectable::{Intersection, Intersectable};
+use intersectable::{Intersection, Intersectable, SolidIntersectable};
 
 use na;
 use na::{Norm};
@@ -65,5 +65,13 @@ impl Intersectable for Sphere
 
         let position = ray.evaluate(t);
         return Some(Intersection::new(t, position, position.as_vec().normalize()));
+    }
+}
+
+impl SolidIntersectable for Sphere
+{
+    fn contains(&self, point: Point) -> bool
+    {
+        na::sqnorm((&point).as_vec()) < 1.0
     }
 }
