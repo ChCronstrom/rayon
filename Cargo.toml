@@ -10,4 +10,15 @@ nalgebra = "0.10.1"
 noise = "0.2.0"
 num = "0.1.30"
 rand = "0.3.13"
-typenum = "1.3.2"
+
+[profile.release]
+lto = true
+opt-level = 3
+
+# [[bin]]
+# name = "scene-constructor"
+# path = "src/bin/scene-constructor/main.rs"
+
+[[bin]]
+name = "renderer"
+path = "src/bin/renderer/main.rs"

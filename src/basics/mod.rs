@@ -24,6 +24,7 @@ pub type RandomSource = rand::Isaac64Rng;
 pub use std::f32::EPSILON;
 pub use std::f32::INFINITY;
 pub use std::f32::NAN;
+pub use std::f32::consts::PI;
 
 pub fn rand_vector_in_sphere<R: rand::Rng>(rng: &mut R) -> Vector
 {

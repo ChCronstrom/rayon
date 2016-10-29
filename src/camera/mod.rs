@@ -18,21 +18,7 @@ impl Camera
 
     pub fn from_position_and_sky_vector(position: Point, look_at: Point, sky_vector: Vector) -> Camera
     {
-        // The y-direction (forwards) of the camera is the vector from `position` to `look_at`,
-        // normalized.
-        let y_direction = (look_at - position).normalize();
-
-        // The x-direction (right) of the camera is the right-hand perpendicular of y and
-        // `sky_vector`.
-        let x_direction = na::cross(&y_direction, &sky_vector).normalize();
-
-        // The z-direction (up) of the camera is x cross y, which is in the plane of y and
-        // `sky_vector`.
-        let z_direction = na::cross(&x_direction, &y_direction).normalize();
-
-        let transformation = Matrix::new(x_direction.x, y_direction.x, z_direction.x,
-                                         x_direction.y, y_direction.y, z_direction.y,
-                                         x_direction.z, y_direction.z, z_direction.z);
+        let transformation = Trans::new_from_orientation_and_sky(look_at - position, sky_vector).transformation;
 
         Camera
         {

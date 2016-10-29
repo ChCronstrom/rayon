@@ -1,0 +1,36 @@
+use std;
+use std::str::FromStr;
+
+use super::*;
+use super::Intersectable::*;
+use super::Modifier::*;
+
+use rayon::{Colour, Float, Trans, Vector};
+
+grammar;
+
+Number: Float = {
+  <r"(\+|-)?[0-9]+(\.[0-9]+)?((E|e)(\+|-)?[0-9]+)?"> => Float::from_str(<>).expect("Bug in grammar")
+};
+
+NumberTriplet: Vector = {
+  "<" <a:Number> "," <b:Number> "," <c:Number> ">" => Vector::new(a, b, c)
+};
+
+Colour: Colour = {
+  "colour" <NumberTriplet>
+};
+
+IntersectableModifier = {
+  "texture" "{" <Colour> "}" => Textured(<>),
+};
+
+pub Sphere: Intersectable = {
+  "sphere" "{" <centre:NumberTriplet> "," <radius:Number> [";" <modifier:IntersectableModifier>]? "}" => {
+    Intersectable::Sphere.transform(scale(radius)).transform(translation(centre)).apply(modifier)
+  }
+};
+
+pub Plane: Intersectable = {
+  "plane" "{" <orientation:NumberTriplet> "}" => Intersectable::Plane.transform(Trans::new_from_orientation_and_sky(orientation, Vector::new(0.0, 1.0, 0.0)))
+};

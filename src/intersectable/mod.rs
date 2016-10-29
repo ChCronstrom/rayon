@@ -14,6 +14,7 @@ pub use self::sphere::Sphere;
 pub use self::textured::Textured;
 pub use self::transformed::Transformed;
 pub use self::union::Union;
+pub use self::csg::CrossSection;
 
 use basics::*;
 use medium::Medium;
@@ -26,6 +27,7 @@ pub struct Intersection<'a>
     pub position: Point,
     pub normal: Vector,
     pub texture: Option<&'a Texture>,
+    pub texture_point: Point,
     pub outside: Medium,
     pub inside: Medium,
 }
@@ -39,6 +41,7 @@ impl<'a> Intersection<'a>
             position: position,
             normal: normal,
             texture: Default::default(),
+            texture_point: position,
             outside: Default::default(),
             inside: Default::default(),
         }
