@@ -48,7 +48,7 @@ impl<'a> Intersection<'a>
     }
 }
 
-pub trait Intersectable: std::fmt::Debug
+pub trait Intersectable: std::fmt::Debug + Sync
 {
     fn find_intersection(&self, ray: Ray) -> Option<Intersection>;
 }

@@ -29,7 +29,7 @@ impl LightInteraction
     }
 }
 
-pub trait Texture: std::fmt::Debug
+pub trait Texture: std::fmt::Debug + Sync
 {
     fn evaluate_texture(&self, rng: &mut RandomSource, location: Point, incidence: Vector, normal: Vector) -> LightInteraction;
 }

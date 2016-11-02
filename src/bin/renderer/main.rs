@@ -39,7 +39,7 @@ fn main()
 {
     let scene = example_scene();
     println!("Making a scene ...");
-    let mut renderer = Renderer::new(&scene);
+    let renderer = RenderSettings::new(&scene, (1920, 1080), 50, 4);
     let postprocessor = PostProcessor::new();
 
     println!("Rendering ...");

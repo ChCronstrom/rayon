@@ -7,18 +7,18 @@ pub use self::chequered::Chequered;
 use std;
 
 // Use associated types instead?
-pub trait Function<From, To>: std::fmt::Debug
+pub trait Function<From, To>: std::fmt::Debug + Sync
 {
     fn evaluate(&self, parameter: From) -> To;
 }
 
-pub struct ClosureFunction<From, To, Closure: Fn(From) -> To>
+pub struct ClosureFunction<From, To, Closure: Fn(From) -> To + Sync>
 {
     closure: Closure,
     _phantom: std::marker::PhantomData<(From, To)>,
 }
 
-impl<From, To, Closure: Fn(From) -> To> ClosureFunction<From, To, Closure>
+impl<From, To, Closure: Fn(From) -> To + Sync> ClosureFunction<From, To, Closure>
 {
     pub fn new(closure: Closure) -> ClosureFunction<From, To, Closure>
     {
@@ -29,7 +29,7 @@ impl<From, To, Closure: Fn(From) -> To> ClosureFunction<From, To, Closure>
     }
 }
 
-impl<From, To, Closure: Fn(From) -> To> Function<From, To> for ClosureFunction<From, To, Closure>
+impl<From: Sync, To: Sync, Closure: Fn(From) -> To + Sync> Function<From, To> for ClosureFunction<From, To, Closure>
 {
     fn evaluate(&self, parameter: From) -> To
     {
@@ -37,7 +37,7 @@ impl<From, To, Closure: Fn(From) -> To> Function<From, To> for ClosureFunction<F
     }
 }
 
-impl<From, To, Closure: Fn(From) -> To> std::fmt::Debug for ClosureFunction<From, To, Closure>
+impl<From, To, Closure: Fn(From) -> To + Sync> std::fmt::Debug for ClosureFunction<From, To, Closure>
 {
     fn fmt(&self, f: &mut std::fmt::Formatter) ->std::fmt::Result
     {

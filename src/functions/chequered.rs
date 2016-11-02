@@ -11,7 +11,7 @@ pub struct Chequered<T>
 }
 
 impl<T> Chequered<T>
-    where T: Copy + Debug
+    where T: Copy + Debug + Sync
 {
     pub fn new(even: T, odd: T) -> Chequered<T>
     {
@@ -23,7 +23,7 @@ impl<T> Chequered<T>
 }
 
 impl<T> Function<Point, T> for Chequered<T>
-    where T: Copy + Debug
+    where T: Copy + Debug + Sync
 {
     fn evaluate(&self, parameter: Point) -> T
     {
