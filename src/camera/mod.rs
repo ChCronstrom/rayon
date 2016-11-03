@@ -1,6 +1,5 @@
 use basics::*;
 
-use na;
 use na::{Norm};
 
 #[derive(Copy, Clone, Debug, Default)]

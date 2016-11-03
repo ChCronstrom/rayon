@@ -1,10 +1,9 @@
 extern crate rayon;
 
 use rayon::*;
-use rayon::functions::{Chequered, ClosureFunction, Function};
-use rayon::functions::noise::VectorNoise;
-use rayon::intersectable::{Plane, Sphere, Textured, Transformed};
-use rayon::texture::{Emissive, Glass, Lambertian};
+use rayon::functions::*;
+use rayon::intersectable::*;
+use rayon::texture::*;
 
 pub fn example_scene() -> Scene
 {

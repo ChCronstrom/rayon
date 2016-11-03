@@ -8,11 +8,9 @@ Stuff that needs doing, in no particular order
 * Constructive solid geometry
     - Merges
     - Intersections ✓
-        - figure out new name for them, because of `intersectable::Intersection`
     - Differences (clipping)
     - Other interesting constructions
         - Dilations (Minkowski addition), Erosions, Openings, Closings?
-    - depends on: IsInside function
 * BVH accelerator
     - depends on: Bounding boxes
 * Bounding boxes
@@ -31,7 +29,7 @@ Stuff that needs doing, in no particular order
     - Swept curve (lathe)
     - ...
 * IsInside function on SolidIntersectable trait ✓
-* Multi-threading optimization
+* Multi-threading optimization ✓
 * Vectorization optimization ✓
 * Scene loading
     - parse scene description

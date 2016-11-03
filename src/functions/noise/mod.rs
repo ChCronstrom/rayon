@@ -1,6 +1,3 @@
-use super::*;
-use basics::*;
-
 /*
 
     What to do with the 3D OpenSimplex noise primitive, N(̄x).

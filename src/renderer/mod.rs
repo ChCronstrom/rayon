@@ -1,22 +1,13 @@
 mod worker;
 
-use std;
 use std::iter::Iterator;
 use std::sync::Mutex;
 
 use basics::*;
-use intersectable::Intersectable;
-use medium::Medium;
 use scene::Scene;
 use self::worker::RenderTask;
 
-use image::Rgb;
-use na;
-use na::{Diagonal, Norm};
-use num::traits::Zero;
 use scoped_threadpool::Pool;
-
-use rand::Rng;
 
 #[derive(Clone, Copy)]
 pub struct RenderSettings<'a>
