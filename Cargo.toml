@@ -21,6 +21,6 @@ opt-level = 3
 # name = "scene-constructor"
 # path = "src/bin/scene-constructor/main.rs"
 
-[[bin]]
-name = "renderer"
-path = "src/bin/renderer/main.rs"
+# [[bin]]
+# name = "renderer"
+# path = "src/bin/renderer/main.rs"

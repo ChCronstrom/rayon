@@ -21,7 +21,9 @@
 */
 
 mod primitive;
+mod scalar;
 mod seeding;
 mod vector;
 
+pub use self::scalar::ScalarNoise;
 pub use self::vector::VectorNoise;

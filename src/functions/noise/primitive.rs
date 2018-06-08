@@ -33,8 +33,8 @@ impl ElementalNoise
 
         // TODO: Refactor this into a safe interface
         let mut permutation_tables: [&'static noise::Seed; NR_OF_OCTAVES] = unsafe { std::mem::zeroed() };
-        for i in 0..4 {
-            let seed_list = [A, B.wrapping_add(i), C.wrapping_add(channel_seed), D.wrapping_add(user_seed)];
+        for i in 0..NR_OF_OCTAVES {
+            let seed_list = [A, B.wrapping_add(i as u32), C.wrapping_add(channel_seed), D.wrapping_add(user_seed)];
             let permutation_table = seeding::get_permutation_table(seed_list);
             unsafe { std::ptr::write(&mut permutation_tables[i as usize], permutation_table); }
         }

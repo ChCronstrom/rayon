@@ -1,9 +1,11 @@
 mod chequered;
 mod noise;
 pub mod pigment;
+mod vectorize;
 
 pub use self::chequered::Chequered;
-pub use self::noise::VectorNoise;
+pub use self::noise::{VectorNoise, ScalarNoise};
+pub use self::vectorize::Vectorize;
 
 use std;
 
