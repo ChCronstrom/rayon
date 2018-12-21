@@ -39,6 +39,20 @@ pub fn rand_vector_in_sphere<R: rand::Rng>(rng: &mut R) -> Vector
     }
 }
 
+#[cfg(test)]
+fn alternate_rand_vector_in_sphere<R: rand::Rng>(rng: &mut R) -> Vector
+{
+    let theta: Float = PI * (Rand::rand(rng) - 0.5);
+    let phi: Float = 2.0 * PI * Rand::rand(rng);
+    let r: Float = Rand::rand(rng).cbrt();
+
+    Vector::new(
+        r * theta.cos() * phi.sin(),
+        r * theta.cos() * phi.cos(),
+        r * theta.sin()
+    )
+}
+
 pub fn rand_vector_in_half_sphere<R: rand::Rng>(rng: &mut R, direction: Vector) -> Vector
 {
     // If dot(randvec, direction) is negative, it's pointing the wrong way. dot(randvec, direction) * normal
@@ -111,7 +125,7 @@ mod tests
 {
     use super::*;
 
-    use na::*;
+    use na::ApproxEq;
     use rand;
     use rand::Rng;
 
@@ -187,17 +201,17 @@ mod tests
 
         for _ in 0..100
         {
-            let random_matrix = Mat3::new(2.0 * randomizer.next_f32() - 1.0,
-                                          2.0 * randomizer.next_f32() - 1.0,
-                                          2.0 * randomizer.next_f32() - 1.0,
-                                          2.0 * randomizer.next_f32() - 1.0,
-                                          2.0 * randomizer.next_f32() - 1.0,
-                                          2.0 * randomizer.next_f32() - 1.0,
-                                          2.0 * randomizer.next_f32() - 1.0,
-                                          2.0 * randomizer.next_f32() - 1.0,
-                                          2.0 * randomizer.next_f32() - 1.0);
+            let random_matrix = Matrix::new(2.0 * randomizer.next_f32() - 1.0,
+                                            2.0 * randomizer.next_f32() - 1.0,
+                                            2.0 * randomizer.next_f32() - 1.0,
+                                            2.0 * randomizer.next_f32() - 1.0,
+                                            2.0 * randomizer.next_f32() - 1.0,
+                                            2.0 * randomizer.next_f32() - 1.0,
+                                            2.0 * randomizer.next_f32() - 1.0,
+                                            2.0 * randomizer.next_f32() - 1.0,
+                                            2.0 * randomizer.next_f32() - 1.0);
 
-            let determinant = determinant(&random_matrix);
+            let determinant = na::determinant(&random_matrix);
             if determinant < 0.001 && determinant > -0.001
             {
                 continue;

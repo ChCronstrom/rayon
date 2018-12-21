@@ -38,7 +38,7 @@ fn main()
 {
     let scene = example_scene();
     println!("Making a scene ...");
-    let renderer = RenderSettings::new(&scene, (1920, 1080), 500, 4);
+    let renderer = RenderSettings::new(&scene, (1920, 1080), 5, 4);
     let postprocessor = PostProcessor::new();
 
     println!("Rendering ...");
